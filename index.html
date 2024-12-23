@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="mycanvas" width="1000" height="600"
+    style="border: 1px solid navy;"></canvas>
+    <script>
+        let canvas = document.getElementById('mycanvas');
+        let ctx = canvas.getContext("2d");
+        let sprite = new Image();
+        let grassImage = new Image();
+        let skyImage = new Image();
+        let xGrass = 0;
+        let frameWidth = 512, frameHeight = 256;
+        let xSprite = 0, ySprite=0, frameNumber =0;
+        let img ={
+            width:0, height:0,name:"cat.png", col:2,row:4
+        }
+
+        sprite.src = "cat.png";
+        grassImage.src ="grass.png"
+        skyImage.src ="sky2.png"
+        sprite.onload = function(){
+            
+            setInterval(draw,100);   
+            img.width = sprite.width;
+            img.height = sprite.height;
+            frameWidth = img.width / img.col; // 512
+            frameHeight = img.height / img.row; // 256
+            num_of_frames = img.col * img.row; //8
+        }
+
+        function draw(){
+            //ctx.clearRect(0,0,canvas.width,canvas.height)
+            ctx.save();
+            ctx.drawImage(skyImage,0,0,canvas.width,canvas.height);
+            ctx.restore();
+        //grass  
+            ctx.save();
+                ctx.translate(xGrass,0);
+                ctx.drawImage(grassImage,0,canvas.height-250,canvas.width,250);
+                ctx.drawImage(grassImage,canvas.width,canvas.height-250,canvas.width,250);
+                if(xGrass <= -canvas.width){
+                    xGrass=0;
+                }
+                xGrass-=20;
+                
+            ctx.restore();    
+        //----------tiger
+            ctx.drawImage(sprite,xSprite,ySprite,frameWidth,frameHeight,
+                    70,350,0.7*frameWidth,0.7*frameHeight);
+                    
+            if(frameNumber==8)
+                  frameNumber=0;
+            xSprite = frameNumber %2 * frameWidth;
+            ySprite = Math.floor(frameNumber /2) * frameHeight;
+            frameNumber++;
+            //----------------------------------------
+        }
+    </script>
+</body>
+</html>
